@@ -1,7 +1,7 @@
 # Convex API Contract: GovSniper Backend
 
 **Feature**: Autonomous Public & Enterprise Procurement Command Center  
-**Branch**: `001-procurement-command-center`  
+**Branch**: `main`  
 **Location**: `convex/`
 
 ---

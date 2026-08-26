@@ -1,6 +1,6 @@
 # Implementation Plan: Autonomous Public & Enterprise Procurement Command Center
 
-**Branch**: `001-procurement-command-center` | **Date**: 2026-08-26 | **Spec**: [spec.md](./spec.md)  
+**Branch**: `main` | **Date**: 2026-08-26 | **Spec**: [spec.md](./spec.md)  
 **Input**: Feature specification from `specs/001-procurement-command-center/spec.md`
 
 ---

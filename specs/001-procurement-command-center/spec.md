@@ -1,6 +1,6 @@
 # Feature Specification: Autonomous Public & Enterprise Procurement Command Center
 
-**Feature Branch**: `001-procurement-command-center`  
+**Feature Branch**: `main`  
 **Created**: 2026-08-26  
 **Status**: Draft  
 **Input**: User description from IDEA.md: Autonomous public and enterprise procurement command center for discovering tenders, extracting compliance matrices, auto-drafting bids, and orchestrating email communications with contracting officers.

@@ -1,7 +1,7 @@
 # Technical Research: GovSniper Procurement Command Center
 
 **Feature**: Autonomous Public & Enterprise Procurement Command Center  
-**Branch**: `001-procurement-command-center`  
+**Branch**: `main`  
 **Date**: 2026-08-26  
 
 ## 1. Backend Architecture: Convex as Unified Reactive Backend vs Express.js

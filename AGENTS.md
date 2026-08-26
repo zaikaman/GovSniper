@@ -22,3 +22,6 @@ specs/001-procurement-command-center/plan.md
 - **Build Log**: Keep `hackathon.md` updated after meaningful build sessions using the `/hackathon` skill.
 - **Frontend Host**: Convex static hosting (`convex.site`).
 
+## 3. Git & Branching Strategy
+- **Single Branch Workflow**: All development, specifications, plans, and commits MUST be done directly on the `main` branch. Never create or switch to feature branches.
+
