@@ -42,11 +42,11 @@
 **Independent Test**: User can input a real procurement URL, watch Firecrawl scrape and ingest the RFP live into Convex, apply category/budget filters, and view full RFP details.
 
 ### Implementation for User Story 1
-- [ ] T012 [P] [US1] Implement Convex queries and mutations for tenders (`listTenders`, `getTenderById`, `createTender`, `updateTenderStatus`, `deleteTender`) in `convex/tenders.ts`
-- [ ] T013 [P] [US1] Implement Firecrawl live portal scraping and markdown conversion action in `convex/firecrawl.ts`
-- [ ] T014 [US1] Build Radar streaming opportunity card with pulse indicators in `src/components/radar/TenderCard.tsx`
-- [ ] T015 [US1] Build multi-dimensional tender filter bar (budget, sector, status, deadline) in `src/components/radar/TenderFilterBar.tsx`
-- [ ] T016 [US1] Build interactive RFP Ingestion Modal allowing users to paste any real portal URL or document to trigger live ingestion in `src/components/radar/IngestTenderModal.tsx` and assemble `src/components/radar/RadarFeed.tsx`
+- [X] T012 [P] [US1] Implement Convex queries and mutations for tenders (`listTenders`, `getTenderById`, `createTender`, `updateTenderStatus`, `deleteTender`) in `convex/tenders.ts`
+- [X] T013 [P] [US1] Implement Firecrawl live portal scraping and markdown conversion action in `convex/firecrawl.ts`
+- [X] T014 [US1] Build Radar streaming opportunity card with pulse indicators in `src/components/radar/TenderCard.tsx`
+- [X] T015 [US1] Build multi-dimensional tender filter bar (budget, sector, status, deadline) in `src/components/radar/TenderFilterBar.tsx`
+- [X] T016 [US1] Build interactive RFP Ingestion Modal allowing users to paste any real portal URL or document to trigger live ingestion in `src/components/radar/IngestTenderModal.tsx` and assemble `src/components/radar/RadarFeed.tsx`
 
 **Checkpoint**: User Story 1 complete and independently testable (MVP Milestone).
 

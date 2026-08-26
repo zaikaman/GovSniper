@@ -1,66 +1,91 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation, useAction } from 'convex/react';
+import { api } from '../convex/_generated/api';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
+import { RadarFeed } from '@/components/radar/RadarFeed';
+import { IngestTenderModal } from '@/components/radar/IngestTenderModal';
 import { VendorProfileModal } from '@/components/vendor/VendorProfileModal';
-import type { NavView, Tender } from '@/types';
+import type { NavView, Tender, VendorProfile } from '@/types';
 import { 
-  Radar, 
   Crosshair, 
   PenTool, 
   Mail, 
   History, 
-  PlusCircle, 
-  Sparkles,
   Zap,
-  Globe
+  ArrowRight
 } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<NavView>('radar');
-  const [selectedTender] = useState<Tender | null>(null);
-  
+  const [selectedTender, setSelectedTender] = useState<Tender | null>(null);
+
   // Modals
   const [isVendorModalOpen, setIsVendorModalOpen] = useState(false);
   const [isIngestModalOpen, setIsIngestModalOpen] = useState(false);
   const [isPipelineModalOpen, setIsPipelineModalOpen] = useState(false);
 
-  // Ingestion input state for live portal scraping
-  const [portalUrl, setPortalUrl] = useState('');
-  const [isScraping, setIsScraping] = useState(false);
+  // Convex Reactive Queries & Mutations
+  const rawTenders = useQuery(api.tenders.list, {}) || [];
+  const vendorProfile = useQuery(api.vendors.getProfile, {});
+  const deleteTenderMutation = useMutation(api.tenders.deleteTender);
+  const saveVendorProfileMutation = useMutation(api.vendors.saveProfile);
+  const scrapeAndIngestAction = useAction(api.firecrawl.scrapeAndIngestPortal);
 
-  const handleIngestPortal = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!portalUrl.trim()) return;
+  // Convert raw DB docs to typed Tenders
+  const tenders: Tender[] = rawTenders as Tender[];
 
-    setIsScraping(true);
+  const handleSelectTender = (tender: Tender) => {
+    setSelectedTender(tender);
+  };
+
+  const handleOpenWarRoom = (tender: Tender) => {
+    setSelectedTender(tender);
+    setCurrentView('warroom');
+  };
+
+  const handleOpenBidStudio = (tender: Tender) => {
+    setSelectedTender(tender);
+    setCurrentView('studio');
+  };
+
+  const handleDeleteTender = async (id: string) => {
     try {
-      // Live Firecrawl ingestion will be invoked here (Phase 3)
-      console.log('Ingesting live portal URL:', portalUrl);
-      setTimeout(() => {
-        setIsScraping(false);
-        setIsIngestModalOpen(false);
-        setPortalUrl('');
-      }, 1500);
+      await deleteTenderMutation({ id: id as any });
+      if (selectedTender?._id === id) {
+        setSelectedTender(null);
+      }
     } catch (err) {
-      console.error('Failed to ingest portal:', err);
-      setIsScraping(false);
+      console.error('Failed to delete tender:', err);
     }
+  };
+
+  const handleIngestUrl = async (url: string, category?: string, budget?: number) => {
+    return await scrapeAndIngestAction({
+      url,
+      categoryOverride: category,
+      budgetOverride: budget,
+    });
+  };
+
+  const handleSaveVendorProfile = async (profile: Omit<VendorProfile, '_id' | 'updatedAt' | 'capabilityEmbedding'>) => {
+    await saveVendorProfileMutation(profile);
   };
 
   return (
     <div className="min-h-screen bg-cyber-bg text-slate-100 flex flex-col font-sans selection:bg-cyber-cyan selection:text-black">
-      {/* Top Mission Control Header */}
+      {/* Mission Control Navigation Header */}
       <Header
         onOpenIngestModal={() => setIsIngestModalOpen(true)}
         onOpenVendorModal={() => setIsVendorModalOpen(true)}
         onOpenPipelineModal={() => setIsPipelineModalOpen(true)}
-        activeTenderCount={selectedTender ? 1 : 0}
+        activeTenderCount={tenders.length}
         hasSelectedTender={!!selectedTender}
       />
 
       {/* Main Workspace Layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar */}
+        {/* Left Operations Matrix Sidebar */}
         <Sidebar
           currentView={currentView}
           onSelectView={(view) => setCurrentView(view)}
@@ -68,86 +93,116 @@ export const App: React.FC = () => {
           unreadEmailCount={0}
         />
 
-        {/* Dynamic Center Stage Content */}
+        {/* Center Stage Panel */}
         <main className="flex-1 overflow-y-auto p-6 bg-cyber-bg radar-grid min-h-[calc(100vh-61px)]">
           {currentView === 'radar' && (
-            <div className="max-w-7xl mx-auto space-y-6">
-              {/* Radar Feed Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-display font-extrabold text-white flex items-center gap-3">
-                    <Radar className="w-7 h-7 text-cyber-cyan animate-pulse" />
-                    Live Opportunity Radar
-                  </h1>
-                  <p className="text-xs font-mono text-slate-400 mt-1">
-                    Real-time ingestion feed from public portals, enterprise procurement feeds, and Firecrawl scraping.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsIngestModalOpen(true)}
-                  className="cyber-button-primary gap-2 text-xs"
-                >
-                  <PlusCircle className="w-4 h-4 text-black" />
-                  <span>Ingest Real Opportunity</span>
-                </button>
-              </div>
-
-              {/* Empty state or tender list placeholder */}
-              <div className="cyber-card p-12 text-center max-w-xl mx-auto space-y-4 my-12 border-dashed">
-                <div className="w-16 h-16 rounded-2xl bg-cyber-surface border border-cyber-cyan/30 mx-auto flex items-center justify-center shadow-cyan-glow">
-                  <Globe className="w-8 h-8 text-cyber-cyan animate-pulse" />
-                </div>
-                <h3 className="text-lg font-display font-bold text-white">
-                  Radar Scanning Ready
-                </h3>
-                <p className="text-xs text-slate-400 font-mono leading-relaxed">
-                  No pre-seeded data. Paste any municipal or enterprise procurement URL (e.g. city RFP portals, SAM.gov, public tenders) to trigger live Firecrawl scraping and AI compliance analysis.
-                </p>
-                <button
-                  onClick={() => setIsIngestModalOpen(true)}
-                  className="cyber-button-primary text-xs mx-auto px-5 py-2.5 flex items-center gap-2"
-                >
-                  <PlusCircle className="w-4 h-4 text-black" />
-                  <span>Ingest Live RFP Portal</span>
-                </button>
-              </div>
-            </div>
+            <RadarFeed
+              tenders={tenders}
+              onSelectTender={handleSelectTender}
+              onOpenWarRoom={handleOpenWarRoom}
+              onOpenBidStudio={handleOpenBidStudio}
+              onOpenIngestModal={() => setIsIngestModalOpen(true)}
+              onDeleteTender={handleDeleteTender}
+              selectedTenderId={selectedTender?._id}
+            />
           )}
 
           {currentView === 'warroom' && (
             <div className="max-w-7xl mx-auto space-y-6">
-              <div className="flex items-center gap-3 pb-4 border-b border-cyber-border">
-                <Crosshair className="w-6 h-6 text-cyber-cyan" />
-                <div>
-                  <h1 className="text-xl font-display font-bold text-white">
-                    Tender War Room
-                  </h1>
-                  <p className="text-xs font-mono text-slate-400">
-                    Automated Compliance Matrix Extraction & Win Probability Scoring
-                  </p>
+              <div className="flex items-center justify-between pb-4 border-b border-cyber-border">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30">
+                    <Crosshair className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-display font-bold text-white">
+                      Tender War Room {selectedTender && `// ${selectedTender.tenderNumber}`}
+                    </h1>
+                    <p className="text-xs font-mono text-slate-400">
+                      {selectedTender ? selectedTender.title : 'Select an opportunity from Radar Discovery to begin analysis'}
+                    </p>
+                  </div>
                 </div>
+
+                {selectedTender && (
+                  <button
+                    onClick={() => setCurrentView('studio')}
+                    className="cyber-button-primary text-xs gap-1.5"
+                  >
+                    <span>Proceed to Bid Studio</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
-              <div className="cyber-card p-8 text-center text-slate-400 font-mono text-xs">
-                Select an opportunity from Radar Discovery to inspect extracted clauses, disqualifiers, and live win probability.
-              </div>
+
+              {!selectedTender ? (
+                <div className="cyber-card p-10 text-center text-slate-400 font-mono text-xs max-w-lg mx-auto my-12 space-y-3">
+                  <p>No tender currently selected for inspection.</p>
+                  <button
+                    onClick={() => setCurrentView('radar')}
+                    className="cyber-button-secondary text-xs px-4 py-2"
+                  >
+                    Browse Radar Discovery
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Summary card */}
+                  <div className="cyber-card p-5 space-y-3 lg:col-span-2">
+                    <h3 className="text-sm font-mono font-bold text-cyber-cyan uppercase">
+                      Opportunity Overview
+                    </h3>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      {selectedTender.summary}
+                    </p>
+                    <div className="pt-2 text-xs font-mono text-slate-400 space-y-1">
+                      <div>Agency: <span className="text-white">{selectedTender.agency}</span></div>
+                      <div>Assigned Inbox: <span className="text-cyber-cyan">{selectedTender.assignedAgentEmail}</span></div>
+                    </div>
+                  </div>
+
+                  {/* Quick stats */}
+                  <div className="cyber-card p-5 space-y-3">
+                    <h3 className="text-sm font-mono font-bold text-white uppercase">
+                      Telemetry
+                    </h3>
+                    <div className="text-xs font-mono space-y-2">
+                      <div className="flex justify-between py-1 border-b border-cyber-border">
+                        <span className="text-slate-400">Win Probability:</span>
+                        <span className="text-cyber-cyan font-bold">{selectedTender.winScore}%</span>
+                      </div>
+                      <div className="flex justify-between py-1 border-b border-cyber-border">
+                        <span className="text-slate-400">Risk Assessment:</span>
+                        <span className="text-cyber-amber uppercase font-bold">{selectedTender.riskLevel}</span>
+                      </div>
+                      <div className="flex justify-between py-1">
+                        <span className="text-slate-400">Sector Category:</span>
+                        <span className="text-white">{selectedTender.category}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
           {currentView === 'studio' && (
             <div className="max-w-7xl mx-auto space-y-6">
               <div className="flex items-center gap-3 pb-4 border-b border-cyber-border">
-                <PenTool className="w-6 h-6 text-cyber-cyan" />
+                <div className="p-2 rounded-xl bg-cyber-emerald/10 text-cyber-emerald border border-cyber-emerald/30">
+                  <PenTool className="w-6 h-6" />
+                </div>
                 <div>
                   <h1 className="text-xl font-display font-bold text-white">
                     Collaborative Bid Studio
                   </h1>
                   <p className="text-xs font-mono text-slate-400">
-                    Real-time Proposal Authoring with Verified Clause Citations
+                    Real-time Citation-Backed Proposal Authoring & AI Generation
                   </p>
                 </div>
               </div>
               <div className="cyber-card p-8 text-center text-slate-400 font-mono text-xs">
-                Active proposal drafting workspace with real-time multi-user cursor presence and AI section synthesis.
+                Collaborative proposal editor will be wired in Phase 6.
               </div>
             </div>
           )}
@@ -155,18 +210,20 @@ export const App: React.FC = () => {
           {currentView === 'inboxes' && (
             <div className="max-w-7xl mx-auto space-y-6">
               <div className="flex items-center gap-3 pb-4 border-b border-cyber-border">
-                <Mail className="w-6 h-6 text-cyber-cyan" />
+                <div className="p-2 rounded-xl bg-cyber-amber/10 text-cyber-amber border border-cyber-amber/30">
+                  <Mail className="w-6 h-6" />
+                </div>
                 <div>
                   <h1 className="text-xl font-display font-bold text-white">
                     AgentMail Communications Hub
                   </h1>
                   <p className="text-xs font-mono text-slate-400">
-                    Autonomous Dedicated Inboxes & Inbound Addendum Redline Alerts
+                    Dedicated RFP Inboxes & Inbound Addendum Diff Engine
                   </p>
                 </div>
               </div>
               <div className="cyber-card p-8 text-center text-slate-400 font-mono text-xs">
-                Dedicated RFP email inboxes provisioned on AgentMail with automatic redline diff extraction.
+                AgentMail autonomous inbox management will be wired in Phase 5.
               </div>
             </div>
           )}
@@ -174,101 +231,45 @@ export const App: React.FC = () => {
           {currentView === 'audit' && (
             <div className="max-w-7xl mx-auto space-y-6">
               <div className="flex items-center gap-3 pb-4 border-b border-cyber-border">
-                <History className="w-6 h-6 text-cyber-cyan" />
+                <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/30">
+                  <History className="w-6 h-6" />
+                </div>
                 <div>
                   <h1 className="text-xl font-display font-bold text-white">
                     Immutable Audit Trace
                   </h1>
                   <p className="text-xs font-mono text-slate-400">
-                    Chronological Ledger of Autonomous Agent Decisions & Ingestions
+                    Chronological Ledger of Autonomous Agent Actions & Decisions
                   </p>
                 </div>
               </div>
               <div className="cyber-card p-8 text-center text-slate-400 font-mono text-xs">
-                Real-time chronological log stream recorded directly in Convex database.
+                Chronological audit timeline stream will be wired in Phase 7.
               </div>
             </div>
           )}
         </main>
       </div>
 
+      {/* Real RFP Portal Ingestion Modal */}
+      <IngestTenderModal
+        isOpen={isIngestModalOpen}
+        onClose={() => setIsIngestModalOpen(false)}
+        onIngest={handleIngestUrl}
+        onSuccess={(tenderId) => {
+          console.log('Successfully ingested tender with ID:', tenderId);
+        }}
+      />
+
       {/* Vendor Profile Configuration Modal */}
       <VendorProfileModal
         isOpen={isVendorModalOpen}
         onClose={() => setIsVendorModalOpen(false)}
+        onSaveProfile={handleSaveVendorProfile}
+        currentProfile={vendorProfile}
       />
 
-      {/* Live RFP Ingestion Modal */}
-      {isIngestModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-lg bg-cyber-panel border border-cyber-cyan/40 rounded-2xl p-6 shadow-cyan-glow space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-cyber-border">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-cyber-cyan/10 text-cyber-cyan">
-                  <Globe className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-display font-bold text-white">
-                  Ingest Live RFP Portal
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsIngestModalOpen(false)}
-                className="text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleIngestPortal} className="space-y-4">
-              <div>
-                <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1.5">
-                  Procurement Portal URL / Document Link
-                </label>
-                <input
-                  type="url"
-                  value={portalUrl}
-                  onChange={(e) => setPortalUrl(e.target.value)}
-                  placeholder="https://procurement.austintexas.gov/tenders/rfp-2026-grid"
-                  required
-                  className="w-full px-3 py-2 bg-cyber-card border border-cyber-border rounded-lg text-white text-xs font-mono focus:outline-none focus:border-cyber-cyan"
-                />
-                <p className="text-[11px] text-slate-500 mt-1">
-                  Firecrawl will scrape the URL, parse specifications into clean Markdown, and extract budget/deadline metadata.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-cyber-border">
-                <button
-                  type="button"
-                  onClick={() => setIsIngestModalOpen(false)}
-                  className="cyber-button-secondary text-xs px-4 py-2"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isScraping}
-                  className="cyber-button-primary text-xs px-4 py-2 flex items-center gap-2"
-                >
-                  {isScraping ? (
-                    <>
-                      <Sparkles className="w-3.5 h-3.5 animate-spin text-black" />
-                      <span>Scraping via Firecrawl...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-3.5 h-3.5 fill-black" />
-                      <span>Start Live Ingestion</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Live Pipeline Execution Modal Placeholder */}
+      {/* Autonomous Pipeline Modal */}
       {isPipelineModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
           <div className="relative w-full max-w-xl bg-cyber-panel border border-cyber-cyan/40 rounded-2xl p-6 shadow-cyan-glow space-y-4">
