@@ -30,4 +30,4 @@ specs/001-procurement-command-center/plan.md
 - When coding, always use the convex-hackathon-skill.
 - Do not write mock or fake code, or hardcode anything, everything must be production-ready and real.
 - Use the impeccable skill when you're working with UI tasks, and make sure your UI work stays consistent with the rest of the app's design.
-
+- All relevant docs should be available in the docs folder, use the find-docs skill if you need anything else.
