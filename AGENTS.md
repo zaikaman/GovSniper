@@ -25,3 +25,9 @@ specs/001-procurement-command-center/plan.md
 ## 3. Git & Branching Strategy
 - **Single Branch Workflow**: All development, specifications, plans, and commits MUST be done directly on the `main` branch. Never create or switch to feature branches.
 
+## 4. Coding Rules
+- Use the find-docs skill when you need up-to-date documentation.
+- When coding, always use the convex-hackathon-skill.
+- Do not write mock or fake code, or hardcode anything, everything must be production-ready and real.
+- Use the impeccable skill when you're working with UI tasks, and make sure your UI work stays consistent with the rest of the app's design.
+
