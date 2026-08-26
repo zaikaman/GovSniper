@@ -23,13 +23,13 @@
 
 **⚠️ CRITICAL**: Must complete before user stories can begin
 
-- [ ] T005 Define complete Convex database schema with tables, indexes, and vector indexes in `convex/schema.ts`
-- [ ] T006 [P] Define core TypeScript types and domain interfaces in `src/types/index.ts`
-- [ ] T007 [P] Create vendor profile management and live vector capability embedding generation in `convex/vendors.ts`
-- [ ] T008 [P] Create formatting and calculation utilities (currency, dates, score tiers, citation links) in `src/lib/utils.ts`
-- [ ] T009 Implement top-level Convex Client provider and app state routing in `src/main.tsx` and `src/App.tsx`
-- [ ] T010 [P] Build Mission Control Header with live Ingestion trigger, Vendor Profile button, and system status in `src/components/layout/Header.tsx`
-- [ ] T011 [P] Build Mission Control Sidebar navigation in `src/components/layout/Sidebar.tsx`
+- [X] T005 Define complete Convex database schema with tables, indexes, and vector indexes in `convex/schema.ts`
+- [X] T006 [P] Define core TypeScript types and domain interfaces in `src/types/index.ts`
+- [X] T007 [P] Create vendor profile management and live vector capability embedding generation in `convex/vendors.ts`
+- [X] T008 [P] Create formatting and calculation utilities (currency, dates, score tiers, citation links) in `src/lib/utils.ts`
+- [X] T009 Implement top-level Convex Client provider and app state routing in `src/main.tsx` and `src/App.tsx`
+- [X] T010 [P] Build Mission Control Header with live Ingestion trigger, Vendor Profile button, and system status in `src/components/layout/Header.tsx`
+- [X] T011 [P] Build Mission Control Sidebar navigation in `src/components/layout/Sidebar.tsx`
 
 **Checkpoint**: Foundation ready — database schema, UI layout shell, and vendor profile system ready.
 

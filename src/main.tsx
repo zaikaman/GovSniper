@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { ConvexProvider, ConvexReactClient } from 'convex/react';
+import App from './App';
 import './index.css';
+
+// Read Convex deployment URL from environment or default to local/placeholder
+const convexUrl = import.meta.env.VITE_CONVEX_URL || 'https://placeholder.convex.cloud';
+const convex = new ConvexReactClient(convexUrl);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <div className="min-h-screen bg-cyber-bg text-slate-100 flex items-center justify-center">
-      <div className="cyber-card p-6 max-w-md text-center">
-        <h1 className="text-xl font-display font-bold text-cyber-cyan mb-2">GovSniper</h1>
-        <p className="text-sm text-slate-400 font-mono">Autonomous Procurement Command Center</p>
-      </div>
-    </div>
+    <ConvexProvider client={convex}>
+      <App />
+    </ConvexProvider>
   </React.StrictMode>
 );
