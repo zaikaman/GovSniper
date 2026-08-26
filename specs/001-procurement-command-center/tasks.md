@@ -19,34 +19,34 @@
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure, database schemas, mock data, and application layout shell
+**Purpose**: Core infrastructure, database schemas, vendor profile management, and application layout shell
 
 **⚠️ CRITICAL**: Must complete before user stories can begin
 
 - [ ] T005 Define complete Convex database schema with tables, indexes, and vector indexes in `convex/schema.ts`
 - [ ] T006 [P] Define core TypeScript types and domain interfaces in `src/types/index.ts`
-- [ ] T007 [P] Create realistic mock procurement dataset and seed generator in `src/lib/mockData.ts`
+- [ ] T007 [P] Create vendor profile management and live vector capability embedding generation in `convex/vendors.ts`
 - [ ] T008 [P] Create formatting and calculation utilities (currency, dates, score tiers, citation links) in `src/lib/utils.ts`
 - [ ] T009 Implement top-level Convex Client provider and app state routing in `src/main.tsx` and `src/App.tsx`
-- [ ] T010 [P] Build Mission Control Header with simulation trigger and live status in `src/components/layout/Header.tsx`
+- [ ] T010 [P] Build Mission Control Header with live Ingestion trigger, Vendor Profile button, and system status in `src/components/layout/Header.tsx`
 - [ ] T011 [P] Build Mission Control Sidebar navigation in `src/components/layout/Sidebar.tsx`
 
-**Checkpoint**: Foundation ready — database schema, UI layout shell, and mock seeds ready.
+**Checkpoint**: Foundation ready — database schema, UI layout shell, and vendor profile system ready.
 
 ---
 
 ## Phase 3: User Story 1 - Live Tender Discovery & Radar Triage (Priority: P1) 🎯 MVP
 
-**Goal**: Ingest, standardize, and display live opportunities in the Radar feed with multi-dimensional filtering.
+**Goal**: Ingest real opportunities dynamically via user-provided portal URLs or documents, standardize, and display live opportunities in the Radar feed with multi-dimensional filtering.
 
-**Independent Test**: User can view live streaming opportunities, apply category/budget filters, and view full RFP details.
+**Independent Test**: User can input a real procurement URL, watch Firecrawl scrape and ingest the RFP live into Convex, apply category/budget filters, and view full RFP details.
 
 ### Implementation for User Story 1
-- [ ] T012 [P] [US1] Implement Convex queries and mutations for tenders (`listTenders`, `getTenderById`, `createTender`, `updateTenderStatus`) in `convex/tenders.ts`
-- [ ] T013 [P] [US1] Implement Firecrawl portal ingestion and markdown conversion action in `convex/firecrawl.ts`
+- [ ] T012 [P] [US1] Implement Convex queries and mutations for tenders (`listTenders`, `getTenderById`, `createTender`, `updateTenderStatus`, `deleteTender`) in `convex/tenders.ts`
+- [ ] T013 [P] [US1] Implement Firecrawl live portal scraping and markdown conversion action in `convex/firecrawl.ts`
 - [ ] T014 [US1] Build Radar streaming opportunity card with pulse indicators in `src/components/radar/TenderCard.tsx`
 - [ ] T015 [US1] Build multi-dimensional tender filter bar (budget, sector, status, deadline) in `src/components/radar/TenderFilterBar.tsx`
-- [ ] T016 [US1] Assemble full Radar Discovery Center feed with live subscriptions in `src/components/radar/RadarFeed.tsx`
+- [ ] T016 [US1] Build interactive RFP Ingestion Modal allowing users to paste any real portal URL or document to trigger live ingestion in `src/components/radar/IngestTenderModal.tsx` and assemble `src/components/radar/RadarFeed.tsx`
 
 **Checkpoint**: User Story 1 complete and independently testable (MVP Milestone).
 
@@ -107,16 +107,16 @@
 
 ---
 
-## Phase 7: User Story 5 - Instant End-to-End Simulation & Audit Traceability (Priority: P5)
+## Phase 7: User Story 5 - Live End-to-End Pipeline Orchestration & Audit Traceability (Priority: P5)
 
-**Goal**: 1-click deterministic 15-second simulation harness for hackathon judges with full chronological audit logging.
+**Goal**: 1-click live execution pipeline orchestrating all 5 stages (live ingestion -> compliance matrix -> win scoring -> proposal generation -> inbox dispatch) with full chronological audit logging.
 
-**Independent Test**: Clicking "Run Live Simulation" triggers all 5 stages in $\le 15$ seconds and populates the audit log.
+**Independent Test**: Triggering the Live Pipeline on any real procurement tender executes all stages against live Convex mutations, vector search, and external services in real-time with full audit trace.
 
 ### Implementation for User Story 5
 - [ ] T036 [P] [US5] Implement immutable audit log queries and event recorder in `convex/audit.ts`
-- [ ] T037 [P] [US5] Implement 15-second end-to-end simulation action orchestrating all 5 stages in `convex/simulation.ts`
-- [ ] T038 [US5] Build live multi-stage simulation progress visualizer modal in `src/components/simulation/SimulationModal.tsx`
+- [ ] T037 [P] [US5] Implement live end-to-end autonomous procurement pipeline action in `convex/pipeline.ts`
+- [ ] T038 [US5] Build live multi-stage pipeline execution visualizer modal in `src/components/pipeline/PipelineModal.tsx`
 - [ ] T039 [US5] Build chronological Audit Timeline view in `src/components/audit/AuditTimeline.tsx`
 
 **Checkpoint**: All 5 User Stories fully implemented and verified.
@@ -128,7 +128,7 @@
 **Purpose**: Production hardening, aesthetic refinement, and end-to-end validation
 
 - [ ] T040 [P] Validate strict TypeScript build and linting across all files with `npm run build`
-- [ ] T041 [P] Verify complete Quickstart workflow and 15s Judge Simulation execution in `specs/001-procurement-command-center/quickstart.md`
+- [ ] T041 [P] Verify complete Quickstart workflow and live pipeline execution in `specs/001-procurement-command-center/quickstart.md`
 - [ ] T042 Polish glassmorphic Mission Control theme, micro-animations, and responsive layouts in `src/index.css`
 
 ---

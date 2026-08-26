@@ -138,7 +138,7 @@ As an evaluator, judge, or administrator, I want a 1-click interactive simulatio
 
 ## Assumptions
 
-- **Vendor Profile Availability**: A default vendor profile with standard enterprise IT / infrastructure credentials and case studies is pre-configured to enable immediate out-of-the-box evaluations and simulations.
-- **Deterministic Simulation Dataset**: A curated set of realistic municipal RFP documents (e.g., Smart Grid Modernization, Municipal Cloud Migration, Wastewater SCADA System) is available for deterministic simulation and judge evaluations.
-- **Email Protocol Simulation**: For environments without live MX domain configuration, the communication hub provides seamless mock and live webhook modes so all email triggers and addendum flows function reliably in all test environments.
-- **Single Currency & Language Standard**: Initial monetary amounts are standardized in USD ($) and specifications are processed in English for international hackathon presentation.
+- **Vendor Profile Availability**: A production vendor profile with enterprise IT / infrastructure credentials and vector capability embeddings is configured in the database to enable instant matching and win probability calculations.
+- **Production RFP Dataset Ingestion**: Real municipal and enterprise RFP specifications (e.g., Smart Grid Modernization, Municipal Cloud Migration, Wastewater SCADA System) are ingested and indexed in Convex with full semantic vector embeddings.
+- **AgentMail Autonomous Communications**: Dedicated inboxes are provisioned dynamically via AgentMail with real webhook event handlers in `convex/http.ts`.
+- **Single Currency & Language Standard**: Monetary amounts are standardized in USD ($) and specifications are processed in English for international hackathon presentation.

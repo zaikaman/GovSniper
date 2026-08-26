@@ -10,10 +10,10 @@
 - **Node.js**: `v18.x` or `v20.x+`
 - **npm** or **pnpm**
 - **Convex Account**: [convex.dev](https://convex.dev)
-- **API Keys (Optional / Fallback provided in Simulation Mode)**:
+- **API Keys**:
   - `OPENAI_API_KEY`, `OPENAI_BASE_URL` (optional), `OPENAI_MODEL`
-  - `FIRECRAWL_API_KEY` (optional for live crawl)
-  - `AGENTMAIL_API_KEY` (optional for live inboxes)
+  - `FIRECRAWL_API_KEY` (for live portal scraping and spec ingestion)
+  - `AGENTMAIL_API_KEY`, `AGENTMAIL_WEBHOOK_SECRET` (for autonomous inboxes & email processing)
 
 ---
 
@@ -26,16 +26,17 @@ Create or update `.env.local` in the project root:
 CONVEX_DEPLOYMENT=dev:govsniper-dev-xxxx
 VITE_CONVEX_URL=https://govsniper-dev-xxxx.convex.cloud
 
-# OpenAI / Custom Gateway (Optional, built-in realistic simulation fallbacks available)
+# OpenAI / Custom Gateway
 OPENAI_API_KEY=sk-...
 OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_MODEL=gpt-4o
 
-# Firecrawl API (Optional for live scraping)
+# Firecrawl API
 FIRECRAWL_API_KEY=fc-...
 
-# AgentMail API (Optional for live email inboxes)
+# AgentMail API & Inbound Webhooks
 AGENTMAIL_API_KEY=am-...
+AGENTMAIL_WEBHOOK_SECRET=whsec-...
 ```
 
 ---

@@ -69,9 +69,9 @@ convex/
 ├── compliance.ts        # Compliance matrix extraction & checklist queries
 ├── proposals.ts         # Collaborative bid studio mutations & proposal queries
 ├── emails.ts            # Dedicated opportunity inboxes & message queries
-├── vendors.ts           # Vendor profile & capability embedding management
+├── vendors.ts           # Vendor profile & live capability embedding management
 ├── audit.ts             # Chronological audit log queries & mutations
-├── simulation.ts        # 1-click deterministic 15-second Judge Simulation Harness
+├── pipeline.ts          # 1-click live autonomous pipeline orchestrator
 ├── ai.ts                # OpenAI actions (compliance extraction, win scoring, proposal drafting)
 ├── firecrawl.ts         # Firecrawl portal crawling & spec ingestion actions
 ├── agentmail.ts         # AgentMail inbox provisioning & outbound RFI dispatch actions
@@ -81,10 +81,13 @@ convex/
 src/
 ├── components/
 │   ├── layout/
-│   │   ├── Header.tsx           # Mission Control navigation & Simulation trigger button
+│   │   ├── Header.tsx           # Mission Control navigation, live trigger & status
 │   │   └── Sidebar.tsx          # Navigation between Radar, War Room, Bid Studio, Inboxes, Audit Log
+│   ├── vendor/
+│   │   └── VendorProfileModal.tsx # Live vendor credentials & capability embedding manager
 │   ├── radar/
 │   │   ├── RadarFeed.tsx        # Live streaming opportunity cards with real-time pulse
+│   │   ├── IngestTenderModal.tsx # User URL / document portal live ingestion modal
 │   │   ├── TenderFilterBar.tsx  # Multi-dimensional filter (budget, sector, status)
 │   │   └── TenderCard.tsx       # Individual opportunity card with win score gauge preview
 │   ├── warroom/
@@ -101,14 +104,13 @@ src/
 │   │   ├── PresenceBar.tsx      # Real-time multi-user cursor presence indicators
 │   │   ├── AiProposalHelper.tsx # AI sidebar for section generation & citation injection
 │   │   └── ExportModal.tsx      # Export to formatted bid package (PDF / Markdown)
-│   ├── simulation/
-│   │   └── SimulationModal.tsx  # Live progress visualizer for the 15s Judge Simulation
+│   ├── pipeline/
+│   │   └── PipelineModal.tsx    # Live progress visualizer for the autonomous execution pipeline
 │   ├── audit/
 │   │   └── AuditTimeline.tsx    # Chronological immutable event stream
 │   └── ui/                      # Glassmorphic dark-theme buttons, badges, modals, inputs
-├── hooks/                       # Custom hooks for presence, simulation timer, and filters
+├── hooks/                       # Custom hooks for presence, pipeline timer, and filters
 ├── lib/
-│   ├── mockData.ts              # Realistic RFP seeds for offline / instant simulation
 │   └── utils.ts                 # Formatting helpers for currency, dates, citations
 ├── App.tsx                      # Root component with view routing
 ├── main.tsx                     # React entry point with ConvexProvider

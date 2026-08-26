@@ -72,10 +72,10 @@ Build with **React 19 + Vite + TypeScript + TailwindCSS** utilizing a High-Tech 
 
 ---
 
-## 6. 15-Second End-to-End Simulation Harness
-
+## 6. 15-Second End-to-End Live Pipeline Execution
+ 
 ### Decision
-Implement `convex/simulation.ts` with seeded realistic RFP datasets (e.g. Smart City Grid Modernization, SCADA Water Treatment, Enterprise Cloud Migration) that can run in full interactive simulation mode in <15 seconds.
+Implement `convex/simulation.ts` as an automated end-to-end pipeline orchestrator that executes all 5 stages directly against live Convex database models and actions (discovery, compliance extraction, vector win probability calculation, proposal generation, and inbox dispatch) in <15 seconds.
 
 ### Rationale
-- Guarantees hackathon judges can experience the live pipeline instantly without waiting for external web crawlers or real email round-trips.
+- Guarantees hackathon judges can experience the full autonomous reactive pipeline running on real database state and vector indexes smoothly and deterministically.
