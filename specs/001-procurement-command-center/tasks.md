@@ -10,10 +10,10 @@
 
 **Purpose**: Project initialization, build configuration, and dependency setup
 
-- [ ] T001 Initialize project dependencies (React 19, Vite, TypeScript, Convex, TailwindCSS, Lucide) in `package.json`
-- [ ] T002 [P] Configure Tailwind CSS with Mission Control dark-mode theme (`#0a0d14`, obsidian cards, `#00f0ff` cyan, `#10b981` emerald, `#f59e0b` amber) in `tailwind.config.js` and `src/index.css`
-- [ ] T003 [P] Configure TypeScript compiler settings and Vite bundler paths in `tsconfig.json`, `tsconfig.node.json`, and `vite.config.ts`
-- [ ] T004 [P] Configure Convex client environment and settings in `convex/convex.config.ts` and `convex.json`
+- [X] T001 Initialize project dependencies (React 19, Vite, TypeScript, Convex, TailwindCSS, Lucide) in `package.json`
+- [X] T002 [P] Configure Tailwind CSS with Mission Control dark-mode theme (`#0a0d14`, obsidian cards, `#00f0ff` cyan, `#10b981` emerald, `#f59e0b` amber) in `tailwind.config.js` and `src/index.css`
+- [X] T003 [P] Configure TypeScript compiler settings and Vite bundler paths in `tsconfig.json`, `tsconfig.node.json`, and `vite.config.ts`
+- [X] T004 [P] Configure Convex client environment and settings in `convex/convex.config.ts` and `convex.json`
 
 ---
 
